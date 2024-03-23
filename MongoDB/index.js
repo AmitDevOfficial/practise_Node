@@ -46,9 +46,9 @@ app.get("/users", async (req, res) => {
 
 app
 .route("/users/:id")
-.get(async (req, res) => {
-    const user = await USER.findById(req.params.id);    
-    if (!user) return res.status(404).json({ error: "Oops..!!! User not found" });
+.get(async(req,res) => {
+    const user = await USER.findById(req.params.id)
+    if(!user) return res.json({error: "Oops..!!! User not found"});
     return res.json(user);
 })
 .patch(async(req,res)=>{
