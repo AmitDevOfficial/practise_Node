@@ -1,0 +1,5 @@
+Schema -- Define the Structure
+    Schema -- Model
+    Using Model to CRUD Operations
+1710957203653: POST: /user
+1710957239237: POST: /users
