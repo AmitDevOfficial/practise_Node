@@ -37,20 +37,35 @@ const userSchema = new mongoose.Schema({
 const USER = mongoose.model("user", userSchema);
 console.log(USER);
 
-app.use(express.urlencoded({ extended: false }))    
+app.use(express.urlencoded({ extended: false }));
 
-app.get("/", async(req, res) => {
-    const user = await USER.find({});
-    return res.json(user); 
-});
+app.get("/users", async (req, res) => {
+    const user = await USER.find({})
+    return res.send(user)
+})
 
+app
+.route("/users/:id")
+.get(async (req, res) => {
+    const user = await USER.findById(req.params.id);    
+    if (!user) return res.status(404).json({ error: "Oops..!!! User not found" });
+    return res.json(user);
+})
+.patch(async(req,res)=>{
+    const user = await USER.findByIdAndUpdate(req.params.id, {lastName: "Changed"})
+    res.json({ status: "Updated Succesfull"})
+})
+.delete(async(req,res) =>{
+    const user = await USER.findByIdAndDelete(req.params.id)
+    res.json({ status: "User Deleted Succesfull"})
+})
 
-app.post("/user", async (req, res) => {
+app.post("/users", async (req, res) => {
     const body = req.body;
-    if (!body || !body.first_name || !body.last_name || !body.email || !body.gender || !body.job_title){
-        return res.status(400).json({ msg: "All Fields are required"});
+    if (!body || !body.first_name || !body.last_name || !body.email || !body.gender || !body.job_title) {
+        return res.status(400).json({ msg: "All Fields are required" });
     }
-    
+
     const user = await USER.create({
         firstName: body.first_name,
         lastName: body.last_name,
